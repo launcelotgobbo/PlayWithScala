@@ -32,7 +32,23 @@ object Examples {
   // Re-defining currying based on tail recursive product function
   def factorial(n: Int): Int = product((x:Int) => x)(1, n)
                                                   //> factorial: (n: Int)Int
-  
   factorial(5)                                    //> res3: Int = 120
-  
+
+	// Further generalization of the functions above using aspects of currying
+	// Beautiful!
+	def generalRangeFunction(combine: (Int, Int) => Int)(identity: Int)(fun: Int => Int)(left:Int, right: Int): Int = {
+		def accumulator(acc: Int, left: Int): Int =
+			if (left > right) acc
+			else accumulator(combine(acc, fun(left)), left + 1)
+		
+		accumulator(identity, left)
+	}                                         //> generalRangeFunction: (combine: (Int, Int) => Int)(identity: Int)(fun: Int 
+                                                  //| => Int)(left: Int, right: Int)Int
+	
+	def fact(n: Int): Int = generalRangeFunction((x: Int, y: Int) => x*y)(1)((x:Int) => x)(1, n)
+                                                  //> fact: (n: Int)Int
+  def sumOfSq(x: Int, y: Int): Int = generalRangeFunction((x:Int, y: Int) => x + y)(0)((x:Int) => x * x)(x, y)
+                                                  //> sumOfSq: (x: Int, y: Int)Int
+  sumOfSq(5, 6)                                   //> res4: Int = 61
+ 	fact(5)                                   //> res5: Int = 120
 }
