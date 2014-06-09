@@ -1,0 +1,44 @@
+package idealised.scala
+
+abstract class Boolean {
+  def ifThenElse[T] (t: => T, e: => T): T
+  
+  def && (x: => Boolean): Boolean = ifThenElse(x, False)
+  def || (x: => Boolean): Boolean = ifThenElse(True, x)
+  def unary_! : Boolean = ifThenElse(False, True)
+  
+  def == (x: => Boolean): Boolean = ifThenElse(x, x.unary_!)
+  def != (x: => Boolean): Boolean = ifThenElse(x.unary_!, x)
+  
+  def < (x: Boolean): Boolean = ifThenElse(False, x)
+    // !this && x
+  
+  
+}
+
+object True extends Boolean {
+  def ifThenElse[T] (t: => T, e: => T): T = t
+  override def toString = "TRUE"
+}
+
+object False extends Boolean {
+  def ifThenElse[T] (t: => T, e: => T): T = e
+  override def toString = "FALSE"
+}
+
+object mainScript {
+  def main(args: Array[String]) = {
+    println (False)
+    println (True)
+    println (True && False)
+    println (False || True)
+    println (False && False)
+    println (True && True)
+    println (!False)
+    println (False < True)
+    println (True < False)
+    println (True < True)
+    println (False < False)
+  } 
+}
+
